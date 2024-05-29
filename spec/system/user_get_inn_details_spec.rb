@@ -27,4 +27,34 @@ describe 'GET /api/v1/inns?search=30638898000199'  do
     
     expect(json_response.length).to eq 5
   end
+
+  it 'and inn doesnt not exist' do
+    # Arrange
+    
+    # Act
+    get "/api/v1/inns/", params: {search: '30638898000199'}
+
+    # Assert
+    expect(response.status).to eq 404
+    expect(response.content_type).to include 'application/json'
+
+    json_response = JSON.parse(response.body)
+    expect(json_response["error"]).to eq 'Não encontrado'
+    expect(json_response.length).to eq 1
+  end
+
+  it 'and doesnt has search param' do
+    # Arrange
+    
+    # Act
+    get "/api/v1/inns/"
+
+    # Assert
+    expect(response.status).to eq 404
+    expect(response.content_type).to include 'application/json'
+
+    json_response = JSON.parse(response.body)
+    expect(json_response["error"]).to eq 'CNPJ não enviado na requisição'
+    expect(json_response.length).to eq 1
+  end
 end

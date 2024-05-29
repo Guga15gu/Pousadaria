@@ -1,6 +1,12 @@
 class Api::V1::InnsController < Api::V1::ApiController
   def index
-    if params[:search].present?
+    unless params[:search].present?
+      return render status:404, json: {error: 'CNPJ não enviado na requisição'}
+    end
+    
+    unless Inn.find_by(registration_number: params[:search])
+      render status:404, json: {error: 'Não encontrado'}
+    else
       inn = Inn.find_by(registration_number: params[:search])
       qtd_inn_rooms = inn.inn_rooms.count
 
@@ -11,11 +17,7 @@ class Api::V1::InnsController < Api::V1::ApiController
         address: inn.address.full_address,
         qtd_inn_rooms: qtd_inn_rooms
       }
-      
-    else
-      render status:404
-    end
+    end  
 
-    
   end
 end
