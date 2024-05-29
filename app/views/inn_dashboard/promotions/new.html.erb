@@ -1,0 +1,8 @@
+<%= form_with url: inn_dashboard_inns_inn_rooms_path, method: :get do |form| %>
+  <%= @inn_rooms.each do |inn_room| %>
+    <%= form.label :room, "#{Pinn_room.name}" %>
+    <%= form.text_field :room %>
+  <%= end %>
+  
+  <%= form.submit "Avançar" %>
+<% end %>
